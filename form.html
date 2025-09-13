@@ -1,9 +1,79 @@
-<form action="index.php" method="post">
-  <label>Total VMs: <input type="number" name="vmCount" required></label>
-  <label>vCPUs: <input type="number" name="vcpuCount" required></label>
-  <label>pCPU:vCPU Ratio (x): <input type="number" name="pcpuRatio" required></label>
-  <label>Speed (GHz): <input type="number" step="0.01" name="speed" required></label>
-  <label>Total RAM (GiB): <input type="number" name="ram" required></label>
-  <label>Total Storage (GiB): <input type="number" name="storage" required></label>
-  <button type="submit">Calculate</button>
-</form>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Azure VM Sizer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+    }
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+    .form-field {
+      flex: 1 1 200px;
+      display: flex;
+      flex-direction: column;
+    }
+    .form-field label {
+      font-weight: bold;
+      margin-bottom: 0.3rem;
+    }
+    .helper-text {
+      font-size: 0.9rem;
+      color: #555;
+      margin-top: 0.2rem;
+    }
+    button {
+      margin-top: 1.5rem;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Azure VM Sizer</h1>
+  <p>Enter your details below to calculate compute, memory, and storage requirements</p>
+
+  <form action="index.php" method="post">
+    <div class="form-row">
+      <div class="form-field">
+        <label for="vmCount">Total Number of VMs</label>
+        <input type="number" id="vmCount" name="vmCount" min="1" required>
+        <div class="helper-text">How many virtual machines are needed?</div>
+      </div>
+      <div class="form-field">
+        <label for="vcpuCount">Total Number of vCPUs</label>
+        <input type="number" id="vcpuCount" name="vcpuCount" min="1" required>
+        <div class="helper-text">Sum of vCPUs across all VMs</div>
+      </div>
+      <div class="form-field">
+        <label for="pcpuRatio">pCPU to vCPU Ratio</label>
+        <input type="number" id="pcpuRatio" name="pcpuRatio" min="1" required>
+        <div class="helper-text">Enter “x” for a 1:x ratio</div>
+      </div>
+      <div class="form-field">
+        <label for="speed">Speed Reference (GHz)</label>
+        <input type="number" id="speed" name="speed" step="0.01" min="0.01" required>
+        <div class="helper-text">Processing speed per pCPU</div>
+      </div>
+      <div class="form-field">
+        <label for="ram">Total RAM (GiB)</label>
+        <input type="number" id="ram" name="ram" min="1" required>
+        <div class="helper-text">Aggregate memory across VMs</div>
+      </div>
+      <div class="form-field">
+        <label for="storage">Total Storage (GiB)</label>
+        <input type="number" id="storage" name="storage" min="1" required>
+        <div class="helper-text">Aggregate disk space</div>
+      </div>
+    </div>
+    <button type="submit">Calculate Requirements</button>
+  </form>
+</body>
+</html>
