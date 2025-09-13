@@ -1,17 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Calculator</title>
-</head>
-<body>
-  <form action="index.php" method="post">
-    <label for="value1">Value 1:</label>
-    <input type="text" id="value1" name="value1" required>
-
-    <label for="value2">Value 2:</label>
-    <input type="text" id="value2" name="value2" required>
-
-    <button type="submit">Calculate</button>
-  </form>
-</body>
-</html>
+<form action="index.php" method="post">
+  <label>Total VMs: <input type="number" name="vmCount" required></label>
+  <label>vCPUs: <input type="number" name="vcpuCount" required></label>
+  <label>pCPU:vCPU Ratio (x): <input type="number" name="pcpuRatio" required></label>
+  <label>Speed (GHz): <input type="number" step="0.01" name="speed" required></label>
+  <label>Total RAM (GiB): <input type="number" name="ram" required></label>
+  <label>Total Storage (GiB): <input type="number" name="storage" required></label>
+  <button type="submit">Calculate</button>
+</form>

@@ -1,23 +1,20 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/../vendor/autoload.php';
 
-use App\FormHandler;
-use App\Calculator;
-use App\Renderer;
+use App\InputHandler;
+use App\VMCalculator;
+use App\OutputRenderer;
 
-$form = new FormHandler();
-$input = $form->getInput();
+$inputHandler = new InputHandler();
+$input        = $inputHandler->getInput();
+$renderer     = new OutputRenderer();
 
-$renderer = new Renderer();
-
-if (
-    isset($input['value1'], $input['value2']) &&
-    is_numeric($input['value1']) &&
-    is_numeric($input['value2'])
-) {
-    $calculator = new Calculator();
-    $result = $calculator->sum((float)$input['value1'], (float)$input['value2']);
-    $renderer->render($result);
-} else {
-    $renderer->renderError('Invalid input; please enter numeric values.');
+// Basic validation
+if ($input['vmCount'] <= 0 || $input['vcpuCount'] <= 0 || $input['pcpuRatio'] <= 0) {
+    $renderer->renderError('VM count, vCPU count, and pCPU:vCPU ratio must be greater than zero.');
+    exit;
 }
+
+$calculator = new VMCalculator();
+$results    = $calculator->calculate($input);
+$renderer->render($results);
