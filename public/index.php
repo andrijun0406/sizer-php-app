@@ -1,7 +1,5 @@
 <?php
-require_once __DIR__ . '/../src/FormHandler.php';
-require_once __DIR__ . '/../src/Calculator.php';
-require_once __DIR__ . '/../src/Renderer.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 use App\FormHandler;
 use App\Calculator;
