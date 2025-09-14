@@ -3,33 +3,41 @@ namespace App;
 
 class OutputRenderer
 {
-    public function render(array $r): void
+    public function render(array $data): void
     {
-        echo "<h2>Current Requirements</h2><ul>";
-        echo "<li>pCPUs: {$r['pCPUCount']}</li>";
-        echo "<li>Total Compute (GHz): {$r['totalComputeGHz']}</li>";
-        echo "<li>Total RAM (GiB): {$r['totalRAMGiB']}</li>";
-        echo "<li>Total Storage (GiB): {$r['totalStorageGiB']}</li>";
-        echo "</ul>";
+        $years = $data['spanYears'];
+        $recs  = $data['records'];
 
-        echo "<h2>Projected Requirements (1 Year Growth)</h2><ul>";
-        echo "<li>Total Compute (GHz): " . number_format($r['projectedComputeGHz'], 2) . "</li>";
-        echo "<li>Total RAM (GiB): " . number_format($r['projectedRAMGiB'], 2) . "</li>";
-        echo "<li>Total Storage (GiB): " . number_format($r['projectedStorageGiB'], 2) . "</li>";
-        echo "</ul>";
+        echo '<h2>Projected Sizing Over Time</h2>';
+        echo '<table border="1" cellpadding="6" cellspacing="0">';
+        echo '<tr>
+                <th>Year</th>
+                <th>Total vCPUs</th>
+                <th>Total Compute (GHz)</th>
+                <th>Total RAM (GiB)</th>
+                <th>Total Storage (GiB)</th>
+                <th>Avg vCPU per VM</th>
+                <th>Avg Speed per VM (GHz)</th>
+                <th>Avg RAM per VM (GiB)</th>
+                <th>Avg Storage per VM (TiB)</th>
+            </tr>';
 
-        echo "<h2>Average VM “T‑Shirt Size”</h2><ul>";
-        echo "<li>Avg Speed per VM (GHz): " . number_format($r['avgSpeedPerVm'], 2) . "</li>";
-        echo "<li>Avg RAM per VM (GiB): " . number_format($r['avgRamPerVmGiB'], 2) . "</li>";
-        echo "<li>Avg Storage per VM (TiB): " . number_format($r['avgStoragePerVmTiB'], 2) . "</li>";
-        echo "</ul>";
+        foreach ($recs as $year => $r) {
+            echo '<tr>';
+            echo "<td>{$year}</td>";
+            echo "<td>" . number_format($r['vcpuTotal'], 1) . "</td>";
+            echo "<td>" . number_format($r['computeGHz'], 2) . "</td>";
+            echo "<td>" . number_format($r['ramGiB'], 2) . "</td>";
+            echo "<td>" . number_format($r['storageGiB'], 2) . "</td>";
+            echo "<td>" . number_format($r['avgVcpuPerVm'], 2) . "</td>";
+            echo "<td>" . number_format($r['avgSpeedPerVm'], 2) . "</td>";
+            echo "<td>" . number_format($r['avgRamPerVmGiB'], 2) . "</td>";
+            echo "<td>" . number_format($r['avgStorPerVmTiB'], 2) . "</td>";
+            echo '</tr>';
+        }
 
-        echo "<h2>Projected Avg VM Size (1 Year Later)</h2><ul>";
-        echo "<li>Avg Speed per VM (GHz): " . number_format($r['avgProjSpeedPerVm'], 2) . "</li>";
-        echo "<li>Avg RAM per VM (GiB): " . number_format($r['avgProjRamPerVmGiB'], 2) . "</li>";
-        echo "<li>Avg Storage per VM (TiB): " . number_format($r['avgProjStoragePerVmTiB'], 2) . "</li>";
-        echo "</ul>";
-
+        echo '</table>';
+        echo '<p><small>Growth span: 0 to ' . $years . ' year(s). Year 0 represents current baseline.</small></p>';
         echo '<a href="form.html">New Calculation</a>';
     }
 

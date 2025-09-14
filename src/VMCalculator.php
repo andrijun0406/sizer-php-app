@@ -4,51 +4,60 @@ namespace App;
 class VMCalculator
 {
     public function calculate(array $input): array
-{
-    $vmCount = $input['vmCount'];
-    $vcpu    = $input['vcpuCount'];
-    $ratio   = $input['pcpuRatio'];
-    $speed   = $input['speed'];
-    $ram     = $input['ram'];
-    $storage = $input['storage'];
+    {
+        $spanYears = max(1, $input['growthYears']);
+        $ratio     = $input['pcpuRatio'];
+        $speedRef  = $input['speed']; // reference speed per pCPU
+        $vmCount   = $input['vmCount'];
+        $vcpuTot   = $input['vcpuCount'];
+        $ramTot    = $input['ram'];
+        $storTot   = $input['storage'];
 
-    $growthSpeed   = $input['growthSpeed'] / 100;
-    $growthRam     = $input['growthRam'] / 100;
-    $growthStorage = $input['growthStorage'] / 100;
+        $growthSpeed   = $input['growthSpeed'] / 100;
+        $growthRam     = $input['growthRam'] / 100;
+        $growthStor    = $input['growthStorage'] / 100;
 
-    $pCPUCount            = $ratio > 0 ? ceil($vcpu / $ratio) : 0;
-    $totalComputeGHz      = $pCPUCount * $speed;
-    $totalRAMGiB          = $ram;
-    $totalStorageGiB      = $storage;
+        $pCPUCount     = $ratio > 0 ? ceil($vcpuTot / $ratio) : 0;
 
-    // Apply annual growth
-    $projectedComputeGHz  = $totalComputeGHz * (1 + $growthSpeed);
-    $projectedRAMGiB      = $totalRAMGiB * (1 + $growthRam);
-    $projectedStorageGiB  = $totalStorageGiB * (1 + $growthStorage);
+        // Pre-calc base values
+        $baseComputeGHz = $pCPUCount * $speedRef;
+        $baseRAMGiB     = $ramTot;
+        $baseStorageGiB = $storTot;
 
-    // Averages
-    $avgSpeedPerVm        = $vmCount > 0 ? $totalComputeGHz / $vmCount : 0;
-    $avgRamPerVmGiB       = $vmCount > 0 ? $ram / $vmCount : 0;
-    $avgStoragePerVmTiB   = $vmCount > 0 ? ($storage / $vmCount) / 1024 : 0;
+        $results = [];
+        for ($year = 0; $year <= $spanYears; $year++) {
+            $factorSpeed = pow(1 + $growthSpeed, $year);
+            $factorRam   = pow(1 + $growthRam, $year);
+            $factorStor  = pow(1 + $growthStor, $year);
 
-    $avgProjSpeedPerVm    = $vmCount > 0 ? $projectedComputeGHz / $vmCount : 0;
-    $avgProjRamPerVmGiB   = $vmCount > 0 ? $projectedRAMGiB / $vmCount : 0;
-    $avgProjStoragePerVmTiB = $vmCount > 0 ? ($projectedStorageGiB / $vmCount) / 1024 : 0;
+            $yearCompute = $baseComputeGHz * $factorSpeed;
+            $yearRAM     = $baseRAMGiB * $factorRam;
+            $yearStor    = $baseStorageGiB * $factorStor;
 
-    return [
-        'pCPUCount'               => $pCPUCount,
-        'totalComputeGHz'         => $totalComputeGHz,
-        'totalRAMGiB'             => $totalRAMGiB,
-        'totalStorageGiB'         => $totalStorageGiB,
-        'projectedComputeGHz'     => $projectedComputeGHz,
-        'projectedRAMGiB'          => $projectedRAMGiB,
-        'projectedStorageGiB'      => $projectedStorageGiB,
-        'avgSpeedPerVm'           => $avgSpeedPerVm,
-        'avgRamPerVmGiB'          => $avgRamPerVmGiB,
-        'avgStoragePerVmTiB'      => $avgStoragePerVmTiB,
-        'avgProjSpeedPerVm'       => $avgProjSpeedPerVm,
-        'avgProjRamPerVmGiB'      => $avgProjRamPerVmGiB,
-        'avgProjStoragePerVmTiB'  => $avgProjStoragePerVmTiB,
-    ];
+            // derive vCPU from compute (divide by reference speed)
+            $yearVcpu = $speedRef > 0 ? $yearCompute / $speedRef : 0;
+
+            // averages
+            $avgSpeedPerVm    = $vmCount > 0 ? $yearCompute / $vmCount : 0;
+            $avgRamPerVmGiB   = $vmCount > 0 ? $yearRAM / $vmCount : 0;
+            $avgStorPerVmTiB  = $vmCount > 0 ? ($yearStor / $vmCount) / 1024 : 0;
+            $avgVcpuPerVm     = $vmCount > 0 ? $yearVcpu / $vmCount : 0;
+
+            $results[$year] = [
+                'computeGHz'     => $yearCompute,
+                'ramGiB'         => $yearRAM,
+                'storageGiB'     => $yearStor,
+                'vcpuTotal'      => $yearVcpu,
+                'avgSpeedPerVm'  => $avgSpeedPerVm,
+                'avgRamPerVmGiB' => $avgRamPerVmGiB,
+                'avgStorPerVmTiB'=> $avgStorPerVmTiB,
+                'avgVcpuPerVm'   => $avgVcpuPerVm,
+            ];
+        }
+
+        return [
+            'spanYears' => $spanYears,
+            'records'   => $results,
+        ];
     }
 }

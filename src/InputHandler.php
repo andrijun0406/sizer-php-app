@@ -15,6 +15,7 @@ class InputHandler
         'growthSpeed'    => floatval($_POST['growthSpeed'] ?? 0),
         'growthRam'      => floatval($_POST['growthRam'] ?? 0),
         'growthStorage'  => floatval($_POST['growthStorage'] ?? 0),
+        'growthYears'    => intval($_POST['growthYears'] ?? 1),
     ];
     }
 }
