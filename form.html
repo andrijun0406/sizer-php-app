@@ -121,19 +121,20 @@
             <div class="helper-text">Total measured compute speed across all pCPUs</div>
           </div>
         </div>
+      </fieldset>
 
-        <div class="form-field">
+   <!-- Always-visible Total RAM and Storage field -->
+      <div class="form-field">
           <label for="ram">Total RAM (GiB)</label>
           <input type="number" id="ram" name="ram" min="1" required>
           <div class="helper-text">Aggregate memory size for all VMs.</div>
         </div>
 
-        <div class="form-field">
+      <div class="form-field">
           <label for="storage">Total Storage (GiB)</label>
           <input type="number" id="storage" name="storage" min="1" required>
           <div class="helper-text">Sum of disk space across all VMs.</div>
         </div>
-      </fieldset>
 
     <!-- Growth rate inputs -->
     <div class="form-field">
