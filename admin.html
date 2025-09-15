@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Panel</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    h1 { color: #333; }
+    button { margin: 10px 0; padding: 10px 20px; font-size: 16px; }
+    #output { margin-top: 20px; padding: 10px; background: #f4f4f4; border: 1px solid #ccc; }
+  </style>
+</head>
+<body>
+  <h1>Admin Panel</h1>
+
+  <form id="adminForm">
+    <button type="button" onclick="runAction('download')">Download File</button><br>
+    <button type="button" onclick="runAction('move')">Move File</button><br>
+    <button type="button" onclick="runAction('parse')">Parse Excel to MySQL</button>
+  </form>
+
+  <div id="output">Status messages will appear here...</div>
+
+  <script>
+    function runAction(action) {
+      const output = document.getElementById('output');
+      output.innerHTML = `Running "${action}"...`;
+
+      fetch(`admin.php?action=${action}`)
+        .then(response => response.text())
+        .then(data => {
+          output.innerHTML = `<strong>Result:</strong><br>${data}`;
+        })
+        .catch(error => {
+          output.innerHTML = `<strong>Error:</strong><br>${error}`;
+        });
+    }
+  </script>
+</body>
+</html>
