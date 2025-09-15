@@ -7,6 +7,7 @@ class VMCalculator
     {
         $inputMode = $input['inputMode'];
         $spanYears = $input['growthYears'];
+        $measuredCompute = $input['measuredCompute'];
         $ratio     = $input['pcpuRatio'];
         $speedRef  = $input['speed'];
         $vmCount   = $input['vmCount'];
@@ -18,12 +19,12 @@ class VMCalculator
         $growthRam    = $input['growthRam'] / 100;
         $growthStor   = $input['growthStorage'] / 100;
 
-        if ($input['inputMode'] === 'measured' && $input['measuredCompute'] > 0) {
-            $baseCompute = $input['measuredCompute'];
+        if ($inputMode === 'measured' && $measuredCompute > 0) {
+            $baseCompute = $measuredCompute;
             // Derive pCPU and vCPU:
             $pCPUCount     = $speedRef > 0 ? $baseCompute / $speedRef : 0;
             $vcpuTot     = $pCPUCount * $ratio;
-            } else {
+        } else {
             $pCPUCount     = $ratio > 0 ? $vcpuTot / $ratio : 0;
             $baseCompute   = $pCPUCount * $speedRef;
         }
@@ -60,6 +61,7 @@ class VMCalculator
             'spanYears' => $spanYears,
             'records'   => $records,
             'inputMode' => $inputMode,
+            'measuredCompute' => $measuredCompute,
         ];
     }
 }
