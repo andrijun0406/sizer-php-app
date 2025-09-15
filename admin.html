@@ -24,13 +24,36 @@
 </p>
 
 
-  <!-- Step 2: Upload to Hostinger -->
   <h3>Step 2: Upload Excel File to Server</h3>
-  <body>Now, find the dell-ax-solutions-for-microsoft-hardware-configurations-guide.xlsx file and upload them to server.</body>
-    upload.php
-    <input type="file" name="excelFile" accept=".xlsx" required>
-    <input type="submit" value="Upload to Server">
-    </form>
+<form id="uploadForm" enctype="multipart/form-data">
+  <input type="file" name="excelFile" id="excelFile" accept=".xlsx" required>
+  <input type="submit" value="Upload to Server">
+</form>
+
+<div id="uploadResult" style="margin-top: 10px; padding: 10px; border: 1px solid #ccc;"></div>
+
+<script>
+document.getElementById('uploadForm').addEventListener('submit', function(e) {
+  e.preventDefault(); // Prevent default form submission
+
+  const fileInput = document.getElementById('excelFile');
+  const formData = new FormData();
+  formData.append('excelFile', fileInput.files[0]);
+
+  fetch('upload.php', {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.text())
+  .then(data => {
+    document.getElementById('uploadResult').innerHTML = `<strong>Upload Result:</strong><br>${data}`;
+  })
+  .catch(error => {
+    document.getElementById('uploadResult').innerHTML = `<strong>Error:</strong><br>${error}`;
+  });
+});
+</script>
+
 
 
   <!-- Step 3: Dummy Parse Button -->
