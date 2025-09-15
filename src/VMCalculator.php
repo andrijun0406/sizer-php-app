@@ -13,40 +13,32 @@ class VMCalculator
         $ramTot    = $input['ram'];
         $storTot   = $input['storage'];
 
-        $growthSpeed   = $input['growthSpeed'] / 100;
-        $growthRam     = $input['growthRam'] / 100;
-        $growthStor    = $input['growthStorage'] / 100;
+        $growthSpeed = $input['growthSpeed'] / 100;
 
-        $pCPUCount = $ratio > 0 ? ceil($vcpuTot / $ratio) : 0;
-        $baseCompute = $pCPUCount * $speedRef;
+        // Baseline Year 0 values
+        $pCPUCount     = $ratio > 0 ? $vcpuTot / $ratio : 0;
+        $baseCompute   = $pCPUCount * $speedRef;
 
-        $records = [];
+        $results = [];
         for ($year = 0; $year <= $spanYears; $year++) {
-            $factorSpeed = pow(1 + $growthSpeed, $year);
-            $factorRam   = pow(1 + $growthRam, $year);
-            $factorStor  = pow(1 + $growthStor, $year);
+            $factorSpeed  = pow(1 + $growthSpeed, $year);
 
-            $yearCompute   = $baseCompute * $factorSpeed;
-            $yearRAM       = $ramTot * $factorRam;
-            $yearStor      = $storTot * $factorStor;
-            $yearVcpuTotal = $speedRef > 0 ? $yearCompute / $speedRef : 0;
+            $yearCompute  = $baseCompute * $factorSpeed;
+            $yearVcpu     = $speedRef > 0 ? $yearCompute / $speedRef : 0;
+            $yearVcpuTotal = $yearVcpu * $ratio;
 
-            $records[$year] = [
+            $results[$year] = [
                 'pCPUCount'       => $pCPUCount,
                 'vcpuTotal'       => $yearVcpuTotal,
                 'computeGHz'      => $yearCompute,
-                'ramGiB'          => $yearRAM,
-                'storageGiB'      => $yearStor,
                 'avgVcpuPerVm'    => $vmCount ? $yearVcpuTotal / $vmCount : 0,
                 'avgSpeedPerVm'   => $vmCount ? $yearCompute / $vmCount : 0,
-                'avgRamPerVmGiB'  => $vmCount ? $yearRAM / $vmCount : 0,
-                'avgStorPerVmTiB' => $vmCount ? ($yearStor / $vmCount) / 1024 : 0,
             ];
         }
 
         return [
             'spanYears' => $spanYears,
-            'records'   => $records,
+            'records'   => $results,
         ];
     }
 }
