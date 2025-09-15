@@ -116,7 +116,7 @@
         <legend>Measured Compute Capacity</legend>
           <div class="form-field">
             <label for="measuredCompute">Compute Capacity (GHz)</label>
-            <input type="number" step="0.1" min="0" id="measuredCompute" name="measuredCompute" value="0">
+            <input type="number" step="0.1" min="0" id="measuredCompute" name="measuredCompute" value="0" required>
             <div class="helper-text">Total measured compute speed across all pCPUs</div>
           </div>
       </fieldset>
@@ -176,9 +176,13 @@
   document.querySelectorAll('input[name="inputMode"]').forEach(el => {
     el.addEventListener('change', () => {
       if (el.value === 'measured' && el.checked) {
+        document.getElementById('vcpuCount').removeAttribute('required');
+        document.getElementById('pcpuRatio').removeAttribute('required');
+        document.getElementById('speed').removeAttribute('required');
         estimateBlock.style.display = 'none';
         measuredBlock.style.display = 'block';
       } else {
+         document.getElementById('measuredCompute').removeAttribute('required');
         estimateBlock.style.display = 'block';
         measuredBlock.style.display = 'none';
       }
