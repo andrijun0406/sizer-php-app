@@ -56,7 +56,7 @@ try {
 // --- FILE DOWNLOAD: Dell Internal Guide ---
 $downloadStatus = '';
 if (isset($_POST['download_file'])) {
-    $localFile = $storageDir . 'hardware-guide-latest.xlsx';
+    $localFile = $storageDir . 'dell-ax-solutions-for-microsoft-hardware-configurations-guide.xlsx';
     // Use cURL for secure file download
     $ch = curl_init($dellExcelUrl);
     // If basic auth is needed, set:
