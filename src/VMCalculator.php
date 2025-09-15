@@ -17,8 +17,16 @@ class VMCalculator
         $growthRam    = $input['growthRam'] / 100;
         $growthStor   = $input['growthStorage'] / 100;
 
-        $pCPUCount    = $ratio > 0 ? $vcpuTot / $ratio : 0;
-        $baseCompute  = $pCPUCount * $speedRef;
+        if ($input['inputMode'] === 'measured' && $input['measuredCompute'] > 0) {
+            $baseCompute = $input['measuredCompute'];
+            // Derive pCPU and vCPU:
+            $pCPUCount     = $speedRef > 0 ? $baseCompute / $speedRef : 0;
+            $vcpuTot     = $pCPUCount * $ratio;
+            } else {
+            $pCPUCount     = $ratio > 0 ? $vcpuTot / $ratio : 0;
+            $baseCompute   = $pCPUCount * $speedRef;
+        }
+
         $baseRAM      = $ramTot;
         $baseStor     = $storTot;
 

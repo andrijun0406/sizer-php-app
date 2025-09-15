@@ -43,39 +43,58 @@
   <p>Enter the following details to calculate compute, memory, and storage requirements:</p>
 
   <form action="index.php" method="post">
-    <div class="form-field">
-      <label for="vmCount">Total Number of VMs</label>
-      <input type="number" id="vmCount" name="vmCount" min="1" required>
-      <div class="helper-text">How many virtual machines will you deploy?</div>
-    </div>
 
     <div class="form-field">
-      <label for="vcpuCount">Total Number of vCPUs</label>
-      <input type="number" id="vcpuCount" name="vcpuCount" min="1" required>
-      <div class="helper-text">Sum of all vCPUs across VMs.</div>
+      <label><input type="radio" name="inputMode" value="estimate" checked> Estimate via vCPU/pCPU/speed</label><br>
+      <label><input type="radio" name="inputMode" value="measured"> I know the Compute Capacity (GHz)</label>
     </div>
 
-    <div class="form-field">
-      <label for="pcpuRatio">pCPU to vCPU Ratio (1:x)</label>
-      <input type="number" id="pcpuRatio" name="pcpuRatio" min="1" required>
-      <div class="helper-text">Indicate "x" in the 1:x ratio (e.g., 2 means 1:2).</div>
+    <!-- Estimate-block -->
+    <div id="estimateInputs">
+      <!-- existing inputs: vmCount, vcpuCount, pcpuRatio, speed, etc. -->
+        <div class="form-field">
+          <label for="vmCount">Total Number of VMs</label>
+          <input type="number" id="vmCount" name="vmCount" min="1" required>
+          <div class="helper-text">How many virtual machines will you deploy?</div>
+        </div>
+
+        <div class="form-field">
+          <label for="vcpuCount">Total Number of vCPUs</label>
+          <input type="number" id="vcpuCount" name="vcpuCount" min="1" required>
+          <div class="helper-text">Sum of all vCPUs across VMs.</div>
+        </div>
+
+        <div class="form-field">
+          <label for="pcpuRatio">pCPU to vCPU Ratio (1:x)</label>
+          <input type="number" id="pcpuRatio" name="pcpuRatio" min="1" required>
+          <div class="helper-text">Indicate "x" in the 1:x ratio (e.g., 2 means 1:2).</div>
+        </div>
+
+        <div class="form-field">
+          <label for="speed">Speed Reference (GHz)</label>
+          <input
+            type="number"
+            id="speed"
+            name="speed"
+            step="0.01"
+            min="0.01"
+            value="2.1"
+            required
+          >
+        <div class="helper-text">
+          Processing speed per pCPU (default: 2.1 GHz)
+        </div>
+      </div>
     </div>
 
-    <div class="form-field">
-    <label for="speed">Speed Reference (GHz)</label>
-    <input
-      type="number"
-      id="speed"
-      name="speed"
-      step="0.01"
-      min="0.01"
-      value="2.1"
-      required
-    >
-    <div class="helper-text">
-      Processing speed per pCPU (default: 2.1 GHz)
+    <!-- Measured-block -->
+    <div id="measuredInputs" style="display:none;">
+      <div class="form-field">
+        <label for="measuredCompute">Compute Capacity (GHz)</label>
+        <input type="number" step="0.1" min="0" id="measuredCompute" name="measuredCompute" value="0">
+        <div class="helper-text">Total measured compute speed across all pCPUs</div>
+      </div>
     </div>
-  </div>
 
     <div class="form-field">
       <label for="ram">Total RAM (GiB)</label>
@@ -124,4 +143,19 @@
     <button type="submit">Calculate Requirements</button>
   </form>
 </body>
+<script>
+  const estimateInputs = document.getElementById('estimateInputs');
+  const measuredInputs = document.getElementById('measuredInputs');
+  document.querySelectorAll('input[name="inputMode"]').forEach(el => {
+    el.addEventListener('change', () => {
+      if (el.value === 'measured' && el.checked) {
+        estimateInputs.style.display = 'none';
+        measuredInputs.style.display = '';
+      } else {
+        estimateInputs.style.display = '';
+        measuredInputs.style.display = 'none';
+      }
+    });
+  });
+</script>
 </html>

@@ -7,7 +7,12 @@ class OutputRenderer
     {
         $spanYears = $data['spanYears'];
         $records   = $data['records'];
-
+        
+        if ($input['inputMode'] === 'measured') {
+            echo '<p><em>Using measured Compute Capacity (' . number_format($input['measuredCompute'], 2) . ' GHz) as baseline.</em></p>';
+        } else {
+            echo '<p><em>Estimating Compute Capacity from vCPU/pCPU ratio and speed reference.</em></p>';
+        }
         echo '<h2>Projected Sizing Over ' . $spanYears . ' Year(s)</h2>';
         echo '<table border="1" cellpadding="6" cellspacing="0">';
         echo '<tr>
