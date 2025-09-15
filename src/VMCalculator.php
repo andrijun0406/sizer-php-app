@@ -5,6 +5,7 @@ class VMCalculator
 {
     public function calculate(array $input): array
     {
+        $inputMode = $input['inputMode'];
         $spanYears = $input['growthYears'];
         $ratio     = $input['pcpuRatio'];
         $speedRef  = $input['speed'];
@@ -58,6 +59,7 @@ class VMCalculator
         return [
             'spanYears' => $spanYears,
             'records'   => $records,
+            'inputMode' => $inputMode,
         ];
     }
 }

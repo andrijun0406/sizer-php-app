@@ -36,6 +36,26 @@
       font-size: 1.1rem;
       cursor: pointer;
     }
+    input-path {
+      border: 2px solid #0078d4;        /* Dell-friendly blue border */
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 4px;
+      background-color: #f0f4f8;        /* Soft contrast fill */
+    }
+
+    .input-path legend {
+      font-weight: bold;
+      padding: 0 0.5rem;
+    }
+
+    .estimate-path {
+      border-color: #2f6f44;            /* Green accent if you’d like differentiation */
+    }
+
+    .measured-path {
+      border-color: #006c8e;            /* Teal accent for measured */
+    }
   </style>
 </head>
 <body>
@@ -44,69 +64,76 @@
 
   <form action="index.php" method="post">
 
+    <!-- Input Mode Selection -->
     <div class="form-field">
       <label><input type="radio" name="inputMode" value="estimate" checked> Estimate via vCPU/pCPU/speed</label><br>
       <label><input type="radio" name="inputMode" value="measured"> I know the Compute Capacity (GHz)</label>
     </div>
 
+    
     <!-- Estimate-block -->
-    <div id="estimateInputs">
-      <!-- existing inputs: vmCount, vcpuCount, pcpuRatio, speed, etc. -->
-        <div class="form-field">
-          <label for="vmCount">Total Number of VMs</label>
-          <input type="number" id="vmCount" name="vmCount" min="1" required>
-          <div class="helper-text">How many virtual machines will you deploy?</div>
-        </div>
+       <fieldset class="input-path estimate-path">
+        <legend>Estimate Inputs</legend>
+          <div id="estimateInputs"> 
+          <div class="form-field">
+              <label for="vmCount">Total Number of VMs</label>
+              <input type="number" id="vmCount" name="vmCount" min="1" required>
+              <div class="helper-text">How many virtual machines will you deploy?</div>
+          </div>
 
-        <div class="form-field">
-          <label for="vcpuCount">Total Number of vCPUs</label>
-          <input type="number" id="vcpuCount" name="vcpuCount" min="1" required>
-          <div class="helper-text">Sum of all vCPUs across VMs.</div>
-        </div>
+            <div class="form-field">
+              <label for="vcpuCount">Total Number of vCPUs</label>
+              <input type="number" id="vcpuCount" name="vcpuCount" min="1" required>
+              <div class="helper-text">Sum of all vCPUs across VMs.</div>
+            </div>
 
-        <div class="form-field">
-          <label for="pcpuRatio">pCPU to vCPU Ratio (1:x)</label>
-          <input type="number" id="pcpuRatio" name="pcpuRatio" min="1" required>
-          <div class="helper-text">Indicate "x" in the 1:x ratio (e.g., 2 means 1:2).</div>
-        </div>
+            <div class="form-field">
+              <label for="pcpuRatio">pCPU to vCPU Ratio (1:x)</label>
+              <input type="number" id="pcpuRatio" name="pcpuRatio" min="1" required>
+              <div class="helper-text">Indicate "x" in the 1:x ratio (e.g., 2 means 1:2).</div>
+            </div>
 
-        <div class="form-field">
-          <label for="speed">Speed Reference (GHz)</label>
-          <input
-            type="number"
-            id="speed"
-            name="speed"
-            step="0.01"
-            min="0.01"
-            value="2.1"
-            required
-          >
-        <div class="helper-text">
-          Processing speed per pCPU (default: 2.1 GHz)
+            <div class="form-field">
+              <label for="speed">Speed Reference (GHz)</label>
+              <input
+                type="number"
+                id="speed"
+                name="speed"
+                step="0.01"
+                min="0.01"
+                value="2.1"
+                required
+              >
+            <div class="helper-text">
+              Processing speed per pCPU (default: 2.1 GHz)
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      </fieldset>
 
     <!-- Measured-block -->
-    <div id="measuredInputs" style="display:none;">
-      <div class="form-field">
-        <label for="measuredCompute">Compute Capacity (GHz)</label>
-        <input type="number" step="0.1" min="0" id="measuredCompute" name="measuredCompute" value="0">
-        <div class="helper-text">Total measured compute speed across all pCPUs</div>
-      </div>
-    </div>
+       <fieldset class="input-path measured-path" style="display:none;">
+        <legend>Measured Compute Capacity</legend>
+        <div id="measuredInputs" style="display:none;">
+          <div class="form-field">
+            <label for="measuredCompute">Compute Capacity (GHz)</label>
+            <input type="number" step="0.1" min="0" id="measuredCompute" name="measuredCompute" value="0">
+            <div class="helper-text">Total measured compute speed across all pCPUs</div>
+          </div>
+        </div>
 
-    <div class="form-field">
-      <label for="ram">Total RAM (GiB)</label>
-      <input type="number" id="ram" name="ram" min="1" required>
-      <div class="helper-text">Aggregate memory size for all VMs.</div>
-    </div>
+        <div class="form-field">
+          <label for="ram">Total RAM (GiB)</label>
+          <input type="number" id="ram" name="ram" min="1" required>
+          <div class="helper-text">Aggregate memory size for all VMs.</div>
+        </div>
 
-    <div class="form-field">
-      <label for="storage">Total Storage (GiB)</label>
-      <input type="number" id="storage" name="storage" min="1" required>
-      <div class="helper-text">Sum of disk space across all VMs.</div>
-    </div>
+        <div class="form-field">
+          <label for="storage">Total Storage (GiB)</label>
+          <input type="number" id="storage" name="storage" min="1" required>
+          <div class="helper-text">Sum of disk space across all VMs.</div>
+        </div>
+      </fieldset>
 
     <!-- Growth rate inputs -->
     <div class="form-field">
@@ -144,16 +171,17 @@
   </form>
 </body>
 <script>
-  const estimateInputs = document.getElementById('estimateInputs');
-  const measuredInputs = document.getElementById('measuredInputs');
+  const estimateBlock = document.querySelector('.estimate-path');
+  const measuredBlock = document.querySelector('.measured-path');
+
   document.querySelectorAll('input[name="inputMode"]').forEach(el => {
     el.addEventListener('change', () => {
       if (el.value === 'measured' && el.checked) {
-        estimateInputs.style.display = 'none';
-        measuredInputs.style.display = '';
+        estimateBlock.style.display = 'none';
+        measuredBlock.style.display = 'block';
       } else {
-        estimateInputs.style.display = '';
-        measuredInputs.style.display = 'none';
+        estimateBlock.style.display = 'block';
+        measuredBlock.style.display = 'none';
       }
     });
   });
