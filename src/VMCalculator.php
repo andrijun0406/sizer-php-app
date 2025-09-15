@@ -43,7 +43,7 @@ class VMCalculator
             $yearStor    = $baseStor * $ft;
             $yearPCPU    = $speedRef > 0 ? $yearCompute / $speedRef : 0;
             $yearVcpuTot = $yearPCPU * $ratio;
-            echo "Year $year: ratio ={$ratio}, speedRef={$speedRef}, yearPCPU={$yearPCPU}, yearVcpuTot={$yearVcpuTot}\n";
+            //echo "Year $year: ratio ={$ratio}, speedRef={$speedRef}, yearPCPU={$yearPCPU}, yearVcpuTot={$yearVcpuTot}\n";
             $records[$year] = [
                 'pCPUCount'       => $yearPCPU,
                 'vcpuTotal'       => $yearVcpuTot,
