@@ -66,7 +66,7 @@
     
     <!-- Input Mode Selection -->
     <div class="form-field">
-      <label><input type="radio" name="inputMode" value="estimate" checked> Estimate via vCPU/pCPU/speed</label><br>
+      <label><input type="radio" name="inputMode" value="estimate" checked> Estimate Compute Capacity (Ghz) via number of vCPU</label><br>
       <label><input type="radio" name="inputMode" value="measured"> I know the Compute Capacity (GHz)</label>
     </div>
 
@@ -78,8 +78,8 @@
       </div>
     
       <div class="form-field">
-              <label for="speed">Speed Reference (GHz)</label>
-              <input
+        <label for="speed">Speed Reference (GHz)</label>
+        <input
                 type="number"
                 id="speed"
                 name="speed"
@@ -88,11 +88,16 @@
                 value="2.1"
                 required
               >
-            <div class="helper-text">
+        <div class="helper-text">
               Processing speed per pCPU (default: 2.1 GHz)
-            </div>
-          </div>
-          
+        </div>
+      </div>
+      <div class="form-field">
+              <label for="pcpuRatio">pCPU to vCPU Ratio (1:x)</label>
+              <input type="number" id="pcpuRatio" name="pcpuRatio" min="1" required>
+              <div class="helper-text">Indicate "x" in the 1:x ratio (e.g., 2 means 1:2).</div>
+      </div>
+
     <!-- Estimate-block -->
        <fieldset class="input-path estimate-path">
         <legend>Estimate Inputs</legend>
@@ -101,12 +106,6 @@
               <label for="vcpuCount">Total Number of vCPUs</label>
               <input type="number" id="vcpuCount" name="vcpuCount" min="1" required>
               <div class="helper-text">Sum of all vCPUs across VMs.</div>
-            </div>
-
-            <div class="form-field">
-              <label for="pcpuRatio">pCPU to vCPU Ratio (1:x)</label>
-              <input type="number" id="pcpuRatio" name="pcpuRatio" min="1" required>
-              <div class="helper-text">Indicate "x" in the 1:x ratio (e.g., 2 means 1:2).</div>
             </div>
         </div>
       </fieldset>
