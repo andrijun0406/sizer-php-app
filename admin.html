@@ -6,35 +6,32 @@
   <style>
     body { font-family: Arial, sans-serif; margin: 40px; }
     h1 { color: #333; }
-    button { margin: 10px 0; padding: 10px 20px; font-size: 16px; }
+    button, input[type="submit"] { margin: 10px 0; padding: 10px 20px; font-size: 16px; }
     #output { margin-top: 20px; padding: 10px; background: #f4f4f4; border: 1px solid #ccc; }
   </style>
 </head>
 <body>
   <h1>Admin Panel</h1>
 
-  <form id="adminForm">
-    <button type="button" onclick="runAction('download')">Download File</button><br>
-    <button type="button" onclick="runAction('move')">Move File</button><br>
-    <button type="button" onclick="runAction('parse')">Parse Excel to MySQL</button>
+  <!-- Step 1: Show download link -->
+  <h3>Step 1: Download Excel File</h3>
+  <p>
+    https://www.delltechnologies.com/asset/en-us/products/converged-infrastructure/technical-support/dell-ax-solutions-for-microsoft-hardware-configurations-guide.xlsx
+      Click here to download the Excel file
+    </a>
+  </p>
+
+  <!-- Step 2: Upload to Hostinger -->
+  <h3>Step 2: Upload Excel File to Server</h3>
+  upload.php
+    <input type="file" name="excelFile" accept=".xlsx" required>
+    <input type="submit" value="Upload to Server">
   </form>
 
-  <div id="output">Status messages will appear here...</div>
+  <!-- Step 3: Dummy Parse Button -->
+  <h3>Step 3: Parse Excel to MySQL</h3>
+  <button onclick="alert('Parsing not implemented yet')">Parse Excel to MySQL</button>
 
-  <script>
-    function runAction(action) {
-      const output = document.getElementById('output');
-      output.innerHTML = `Running "${action}"...`;
-
-      fetch(`admin.php?action=${action}`)
-        .then(response => response.text())
-        .then(data => {
-          output.innerHTML = `<strong>Result:</strong><br>${data}`;
-        })
-        .catch(error => {
-          output.innerHTML = `<strong>Error:</strong><br>${error}`;
-        });
-    }
-  </script>
+  <div id="output"></div>
 </body>
 </html>
