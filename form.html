@@ -63,13 +63,19 @@
   <p>Enter the following details to calculate compute, memory, and storage requirements:</p>
 
   <form action="index.php" method="post">
-
+    
     <!-- Input Mode Selection -->
     <div class="form-field">
       <label><input type="radio" name="inputMode" value="estimate" checked> Estimate via vCPU/pCPU/speed</label><br>
       <label><input type="radio" name="inputMode" value="measured"> I know the Compute Capacity (GHz)</label>
     </div>
 
+    <!-- Always-visible Total VMs field -->
+      <div class="form-field">
+        <label for="vmCount">Total Number of VMs</label>
+        <input type="number" id="vmCount" name="vmCount" min="1" required value="1">
+        <div class="helper-text">Number of virtual machines—used for per‑VM metrics.</div>
+      </div>
     
     <!-- Estimate-block -->
        <fieldset class="input-path estimate-path">
