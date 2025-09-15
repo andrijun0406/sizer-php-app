@@ -4,7 +4,7 @@
 $host = 'localhost';
 $db   = 'u952857351_sizerdb';
 $user = 'u952857351_sizerdbadmin';
-$pass = 'dKwIvuTO6';
+$pass = 'dKwIvuTO';
 $status = '';
 
 try {
