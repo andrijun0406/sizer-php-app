@@ -39,7 +39,7 @@ class OutputRenderer
         }
 
         echo '</table>';
-        echo '<p><small>Year 0 = current baseline. Subsequent years include applied growth.</small></p>';
+        echo '<p><small>Year 0 = baseline. Growth applied to compute speed only.</small></p>';
         echo '<a href="form.html">New Calculation</a>';
     }
 
