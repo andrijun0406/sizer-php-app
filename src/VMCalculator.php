@@ -31,11 +31,11 @@ class VMCalculator
             $yearCompute = $baseCompute * $fs;
             $yearRAM     = $baseRAM * $fr;
             $yearStor    = $baseStor * $ft;
-            $yearVcpu    = $speedRef > 0 ? $yearCompute / $speedRef : 0;
-            $yearVcpuTot = $yearVcpu * $ratio;
+            $yearPCPU    = $speedRef > 0 ? $yearCompute / $speedRef : 0;
+            $yearVcpuTot = $yearPCPU * $ratio;
 
             $records[$year] = [
-                'pCPUCount'       => $pCPUCount,
+                'pCPUCount'       => $yearPCPU,
                 'vcpuTotal'       => $yearVcpuTot,
                 'computeGHz'      => $yearCompute,
                 'ramGiB'          => $yearRAM,
