@@ -166,6 +166,9 @@
     </div>
 
     <button type="submit">Calculate Requirements</button>
+    <div id="db-status">
+      <!-- Status will load here -->
+    </div>
   </form>
 </body>
 <script>
@@ -187,5 +190,18 @@
       }
     });
   });
+
+  window.addEventListener('DOMContentLoaded', () => {
+    fetch('db-status.php')
+      .then(response => response.text())
+      .then(text => {
+        document.getElementById('db-status').innerHTML = text;
+      })
+      .catch(() => {
+        document.getElementById('db-status').innerHTML =
+          '<span style="color: red;">Database status unavailable.</span>';
+      });
+  });
+
 </script>
 </html>
