@@ -77,6 +77,22 @@
         <div class="helper-text">Number of virtual machines—used for per‑VM metrics.</div>
       </div>
     
+      <div class="form-field">
+              <label for="speed">Speed Reference (GHz)</label>
+              <input
+                type="number"
+                id="speed"
+                name="speed"
+                step="0.01"
+                min="0.01"
+                value="2.1"
+                required
+              >
+            <div class="helper-text">
+              Processing speed per pCPU (default: 2.1 GHz)
+            </div>
+          </div>
+          
     <!-- Estimate-block -->
        <fieldset class="input-path estimate-path">
         <legend>Estimate Inputs</legend>
@@ -92,22 +108,6 @@
               <input type="number" id="pcpuRatio" name="pcpuRatio" min="1" required>
               <div class="helper-text">Indicate "x" in the 1:x ratio (e.g., 2 means 1:2).</div>
             </div>
-
-            <div class="form-field">
-              <label for="speed">Speed Reference (GHz)</label>
-              <input
-                type="number"
-                id="speed"
-                name="speed"
-                step="0.01"
-                min="0.01"
-                value="2.1"
-                required
-              >
-            <div class="helper-text">
-              Processing speed per pCPU (default: 2.1 GHz)
-            </div>
-          </div>
         </div>
       </fieldset>
 
