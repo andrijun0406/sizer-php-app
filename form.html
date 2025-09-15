@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Azure VM Sizer</title>
+  <title>Azure Local Workload Calculator</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -62,10 +62,20 @@
     </div>
 
     <div class="form-field">
-      <label for="speed">Speed Reference (GHz)</label>
-      <input type="number" id="speed" name="speed" step="0.01" min="0.01" required>
-      <div class="helper-text">Processing speed per pCPU in GHz.</div>
+    <label for="speed">Speed Reference (GHz)</label>
+    <input
+      type="number"
+      id="speed"
+      name="speed"
+      step="0.01"
+      min="0.01"
+      value="2.1"
+      required
+    >
+    <div class="helper-text">
+      Processing speed per pCPU (default: 2.1 GHz)
     </div>
+  </div>
 
     <div class="form-field">
       <label for="ram">Total RAM (GiB)</label>
