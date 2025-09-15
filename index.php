@@ -20,9 +20,18 @@ $input        = $inputHandler->getInput();
 $renderer     = new OutputRenderer();
 
 // Basic validation
-if ($input['vmCount'] <= 0 || $input['vcpuCount'] <= 0 || $input['pcpuRatio'] <= 0) {
-    $renderer->renderError('VM count, vCPU count, and pCPU:vCPU ratio must be greater than zero.');
-    exit;
+if ($input['inputMode'] === 'measured') {
+    // Measured path: only require vmCount and measuredCompute
+    if ($input['vmCount'] <= 0 || $input['measuredCompute'] <= 0) {
+        $renderer->renderError('VM count and measured compute capacity must be greater than zero.');
+        exit;
+    }
+} else {
+    // Estimate path: require vmCount, vcpuCount, pcpuRatio, speedReference
+    if ($input['vmCount'] <= 0 || $input['vcpuCount'] <= 0 || $input['pcpuRatio'] <= 0 || $input['speed'] <= 0) {
+        $renderer->renderError('VM count, vCPU count, pCPU:vCPU ratio, and speed reference must be greater than zero.');
+        exit;
+    }
 }
 
 $calculator = new VMCalculator();
