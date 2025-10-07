@@ -52,10 +52,3 @@ __pycache__/
 *.env
 .env
 *.sqlite3
-
-# OS/Editor
-.DS_Store
-*.swp
-*.swo
-.idea/
-.vscode/
