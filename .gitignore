@@ -2,7 +2,7 @@
 node_modules/
 
 # Composer dependencies
-/vendor/
+vendor/
 
 # Environment files
 .env
@@ -43,3 +43,19 @@ uploads/
 
 # Ignore compiled templates
 *.blade.php.php
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.env
+.env
+*.sqlite3
+
+# OS/Editor
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
