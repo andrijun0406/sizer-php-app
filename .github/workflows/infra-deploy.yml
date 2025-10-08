@@ -1,3 +1,4 @@
+
 name: Deploy Infrastructure to Azure
 
 on:
@@ -8,6 +9,7 @@ on:
 jobs:
   deploy-infra:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -15,14 +17,20 @@ jobs:
       - name: Azure Login
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
 
       - name: Check if Web App Exists
         id: check_webapp
         run: |
           set -e
           echo "Checking if Azure Web App exists..."
-          EXISTS=$(az webapp show --name flask-python-app --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --query "name" -o tsv || echo "")
+          EXISTS=$(az webapp show \
+            --name flask-python-app \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --query "name" -o tsv || echo "")
           if [ -z "$EXISTS" ]; then
             echo "Web App does not exist. Proceeding with deployment."
             echo "deploy=true" >> $GITHUB_OUTPUT
@@ -37,4 +45,6 @@ jobs:
           az deployment group create \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
             --template-file infra/azure_flask_app_template_indonesia.json \
-            --parameters location="Indonesia Central"
+            --parameters location="Indonesia Central" \
+            --no-prompt \
+            --only-show-errors
