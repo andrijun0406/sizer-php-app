@@ -1,0 +1,42 @@
+name: Deploy Flask App Code
+
+on:
+  push:
+    paths:
+      - 'python/**'
+
+jobs:
+  deploy-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Check if Web App Exists
+        id: check_webapp
+        run: |
+          set -e
+          echo "Checking if Azure Web App exists..."
+          EXISTS=$(az webapp show --name flask-python-app --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} --query "name" -o tsv || echo "")
+          if [ -z "$EXISTS" ]; then
+            echo "Web App does not exist. Skipping app deployment."
+            echo "deploy=false" >> $GITHUB_OUTPUT
+          else
+            echo "Web App exists. Proceeding with app deployment."
+            echo "deploy=true" >> $GITHUB_OUTPUT
+
+      - name: Deploy Flask App Code
+        if: steps.check_webapp.outputs.deploy == 'true'
+        run: |
+          echo "Zipping Flask app code..."
+          zip -r app.zip python/
+          echo "Deploying Flask app to Azure Web App..."
+          az webapp deploy \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --name flask-python-app \
+            --src-path app.zip
