@@ -8,7 +8,7 @@
     },
     "webAppName": {
       "type": "string",
-      "defaultValue": "flaskAppIndonesia"
+      "defaultValue": "testflask"
     },
     "location": {
       "type": "string",
